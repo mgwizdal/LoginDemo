@@ -1,9 +1,17 @@
 package com.example.logindemo.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.transition.Fade
+import androidx.transition.Transition
+import androidx.transition.TransitionManager
+import androidx.transition.TransitionSet
 import com.example.logindemo.R
-import com.example.logindemo.utils.*
+import com.example.logindemo.utils.hide
+import com.example.logindemo.utils.include
+import com.example.logindemo.utils.makeInvisible
+import com.example.logindemo.utils.show
 import com.example.logindemo.viewmodel.ErrorType
 import com.example.logindemo.viewmodel.LoginActivityViewModel
 import com.example.logindemo.viewmodel.LoginUiState
@@ -29,8 +37,6 @@ class LoginActivity : AppCompatActivity() {
                     is LoginUiState.Error -> handleErrorUi(it)
                 }
             }
-
-
         setupButton()
     }
 
@@ -41,9 +47,31 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun handleSuccessUi() {
-        progressBarLogin.makeInvisible()
+        val fadeLoginContainer = loginContainer.createFade(Fade.OUT)
+        val fadeLoginLabel = loginLabel.createFade(Fade.OUT)
+        val fadeSuccess = successTextView.createFade(Fade.IN, FADE_DURATION + FADE_DELAY)
+        val set = TransitionSet().apply {
+            addTransition(fadeLoginContainer)
+            addTransition(fadeLoginLabel)
+            addTransition(fadeSuccess)
+        }
+        TransitionManager.beginDelayedTransition(mainContainer, set)
+        loginContainer.hide()
+        loginLabel.hide()
+        successTextView.show()
+        progressBarLogin.hide()
         loginButton.show()
-        errorTextView.hide()
+        icon.animate().setStartDelay(FADE_DURATION).translationY(150f).setDuration(1500L)
+            .scaleX(1.7f)
+            .scaleY(1.7f)
+    }
+
+    private fun View.createFade(mode: Int, startDelay: Long? = null): Transition {
+        val fade = Fade(mode)
+        fade.duration = FADE_DURATION
+        fade.startDelay = startDelay ?: FADE_DELAY
+        fade.addTarget(this)
+        return fade
     }
 
     private fun handleErrorUi(it: LoginUiState.Error) {
@@ -68,8 +96,25 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (viewModel.successScreenState) {
+            icon.animate().setDuration(1000).scaleY(1f).scaleX(1f)
+                .withEndAction {
+                    successTextView.hide()
+                    loginContainer.show()
+                    loginLabel.show()
+                    viewModel.successScreenState = false
+                }
+        } else super.onBackPressed()
+    }
+
     override fun onDestroy() {
         destroyDisposable.dispose()
         super.onDestroy()
+    }
+
+    companion object {
+        private const val FADE_DURATION = 1000L
+        private const val FADE_DELAY = 500L
     }
 }

@@ -16,6 +16,8 @@ class LoginActivityViewModel(
     private val rxSchedulers: RxSchedulers
 ) : ViewModel() {
     private val clearedDisposables = CompositeDisposable()
+    var successScreenState = false
+
     private val loginAction = BehaviorSubject.create<LoginUiState>()
     val loginUiState: Observable<LoginUiState> = loginAction
         .observeOn(rxSchedulers.ui)
@@ -26,6 +28,7 @@ class LoginActivityViewModel(
             .compose(useCase)
             .startWith(LoginResult.Pending)
             .map {
+                successScreenState = false
                 when (it) {
                     LoginResult.Pending -> LoginUiState.Pending
                     is LoginResult.Success -> handleSuccess(it)
@@ -41,7 +44,10 @@ class LoginActivityViewModel(
     }
 
     private fun handleSuccess(it: LoginResult.Success): LoginUiState {
-        return if (it.isAuthorized) LoginUiState.Success else LoginUiState.Error(
+        return if (it.isAuthorized) {
+            successScreenState = true
+            LoginUiState.Success
+        } else LoginUiState.Error(
             ErrorType.WRONG_CREDENTIALS
         )
     }
@@ -59,7 +65,6 @@ class LoginActivityViewModel(
 class EmptyCredentialsException() : Throwable()
 
 sealed class LoginUiState {
-    object Idle : LoginUiState()
     object Pending : LoginUiState()
     object Success : LoginUiState()
     data class Error(val errorType: ErrorType) : LoginUiState()

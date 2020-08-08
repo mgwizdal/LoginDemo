@@ -8,21 +8,23 @@
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
         tools:context=".view.LoginActivity">
 
-
         <ImageView
             android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="23dp"
+            android:layout_marginTop="50dp"
             android:src="@drawable/ic_applover"
             app:layout_constraintBottom_toTopOf="@id/loginLabel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/loginLabel"
@@ -31,17 +33,18 @@
             android:layout_marginBottom="39dp"
             android:text="@string/login"
             android:textColor="@android:color/white"
-            android:textSize="26sp"
+            android:textSize="@dimen/label_text_size"
             app:layout_constraintBottom_toTopOf="@id/loginContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
+            android:id="@+id/successTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/success"
             android:textColor="@color/colorAccent"
-            android:textSize="37sp"
+            android:textSize="@dimen/success_text_size"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,13 +66,13 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:visibility="gone"
                 android:textColor="@color/colorErrorRed"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/etPasswordLayout"
-                tools:visibility="visible"
-                tools:text="Error!" />
+                tools:text="Error!"
+                tools:visibility="visible" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/containerButton"
@@ -89,7 +92,7 @@
                     android:text="@string/login"
                     android:textAllCaps="false"
                     android:textColor="@color/colorAccent"
-                    android:textSize="19sp"
+                    android:textSize="@dimen/button_text_size"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -135,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="52dp"
                 android:layout_marginStart="52dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:textColorHint="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

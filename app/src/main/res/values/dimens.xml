@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="margin_normal">8dp</dimen>
+    <dimen name="label_text_size">26sp</dimen>
+    <dimen name="success_text_size">37sp</dimen>
+    <dimen name="button_text_size">19sp</dimen>
 </resources>
