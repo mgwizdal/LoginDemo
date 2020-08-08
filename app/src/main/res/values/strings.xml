@@ -3,4 +3,9 @@
     <string name="email_address">Email address</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+    <string name="success">Success!</string>
+    <string name="empty_credentials">Please provide both email address and password!</string>
+    <string name="wrong_credentials">Wrong credentials! Try again!</string>
+    <string name="network_exception">Network exception occurred!</string>
+    <string name="unknown_error">Unknown exception.</string>
 </resources>
