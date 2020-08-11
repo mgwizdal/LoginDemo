@@ -1,5 +1,7 @@
 package com.example.logindemo.model
 
+import com.example.logindemo.model.api.AuthorizeDto
+import com.example.logindemo.model.api.AuthorizeResponseDto
 import com.example.logindemo.model.api.LoginService
 import com.example.logindemo.viewmodel.ErrorType
 import io.reactivex.Single
@@ -23,7 +25,9 @@ class LoginUseCaseTest {
 
     private val username = "app@lover.com"
     private val password = "password"
-    private val response = true
+    private val request = AuthorizeDto(username, password)
+    private val response = AuthorizeResponseDto("success")
+    private val failedResponse = AuthorizeResponseDto("failure")
 
     private val action = PublishSubject.create<LoginAction>()
     private lateinit var observer: TestObserver<LoginResult>
@@ -39,23 +43,20 @@ class LoginUseCaseTest {
     fun `Test success - is authorized`() {
         //given
         `when`(
-            service.login(
-                username,
-                password
-            )
+            service.login(request)
         ).thenReturn(Single.just(Response.success(response)))
 
         //then
         action.onNext(LoginAction(username, password))
 
         //then
-        observer.assertValue(LoginResult.Success(response))
+        observer.assertValue(LoginResult.Success(true))
     }
 
     @Test
     fun `Test success - is not authorized`() {
         //given
-        `when`(service.login(username, password)).thenReturn(Single.just(Response.success(false)))
+        `when`(service.login(request)).thenReturn(Single.just(Response.success(failedResponse)))
 
         //then
         action.onNext(LoginAction(username, password))
@@ -67,7 +68,7 @@ class LoginUseCaseTest {
     @Test
     fun `Test error - call failed`() {
         //given
-        `when`(service.login(username, password)).thenReturn(
+        `when`(service.login(request)).thenReturn(
             Single.just(
                 Response.error(
                     500, ResponseBody.create(

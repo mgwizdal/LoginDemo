@@ -2,10 +2,10 @@ package com.example.logindemo.model.api
 
 import io.reactivex.Single
 import retrofit2.Response
-import retrofit2.http.POST
-
+import retrofit2.http.*
 
 interface LoginService {
+
     @POST("login")
-    fun login(username: String, password: String): Single<Response<Boolean>>
+    fun login(@Body username: AuthorizeDto): Single<Response<AuthorizeResponseDto>>
 }

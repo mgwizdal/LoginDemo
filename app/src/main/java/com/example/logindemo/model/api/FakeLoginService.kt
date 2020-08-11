@@ -5,9 +5,9 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 class FakeLoginService : LoginService {
-    override fun login(username: String, password: String): Single<Response<Boolean>> {
+    override fun login(username: AuthorizeDto): Single<Response<AuthorizeResponseDto>> {
         return Single.just(
-            Response.success(username == "login@applover.pl" && password == "password123"))
+            Response.success(AuthorizeResponseDto("success")))
             .delay(2, TimeUnit.SECONDS)
     }
 }

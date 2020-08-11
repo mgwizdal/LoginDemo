@@ -1,7 +1,6 @@
 package com.example.logindemo
 
 import com.example.logindemo.model.LoginUseCase
-import com.example.logindemo.model.api.FakeLoginService
 import com.example.logindemo.model.api.LoginService
 import com.example.logindemo.utils.RxSchedulers
 import com.example.logindemo.viewmodel.LoginActivityViewModel
@@ -29,21 +28,19 @@ val networkModule = module {
 }
 
 fun provideLoginService(retrofit: Retrofit): LoginService {
-    //If only the api documentation works...
-//    return retrofit.create(LoginService::class.java)
-    return FakeLoginService()
+    return retrofit.create(LoginService::class.java)
 }
 
 fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
     return Retrofit.Builder()
-        .baseUrl("https://bench-api.applover.pl/api/v1/")
+        .baseUrl("https://applover-login.herokuapp.com/")
         .client(okHttpClient)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create()).build()
 }
 
 fun provideOkHttpClient(interceptor: Interceptor): OkHttpClient {
-    return OkHttpClient().newBuilder().addInterceptor(interceptor).build()
+    return OkHttpClient().newBuilder().addNetworkInterceptor(interceptor).build()
 }
 
 fun provideStethoInterceptor(): Interceptor = StethoInterceptor()
